@@ -74,7 +74,7 @@ const EMBEDDED_DATA = {
       "rating": 4.4,
       "review_count": 609,
       "product_url": "https://www.amazon.com/dp/B0F96N2BP8",
-      "image_url": "https://images-na.ssl-images-amazon.com/images/I/61hpjtmVBZL._AC_UL165_SR165%2C165_.jpg",
+      "image_url": "imgs/amz001.webp",
       "pros": [
         "Intelligent scalp-protect mode",
         "High-speed airflow"
@@ -94,7 +94,7 @@ const EMBEDDED_DATA = {
       "rating": 4.6,
       "review_count": 4200,
       "product_url": "https://www.amazon.com/dp/B0B4T6RTZ2",
-      "image_url": "https://m.media-amazon.com/images/I/3101eI6zMNL._AC_SR360,460.jpg",
+      "image_url": "imgs/amz002.webp",
       "pros": [
         "Strong motor performance",
         "Consistent temperature control"
@@ -114,7 +114,7 @@ const EMBEDDED_DATA = {
       "rating": 4.5,
       "review_count": 180,
       "product_url": "https://www.amazon.com/dp/B0DMXBBK36",
-      "image_url": "https://images-na.ssl-images-amazon.com/images/I/61zepjlfDAL._AC_UL165_SR165%2C165_.jpg",
+      "image_url": "imgs/amz003.webp",
       "pros": [
         "Pro-level airflow geometry",
         "Light in hand for long sessions"
@@ -134,7 +134,7 @@ const EMBEDDED_DATA = {
       "rating": 4.5,
       "review_count": 7600,
       "product_url": "https://www.amazon.com/dp/B0B89P16MC",
-      "image_url": "https://m.media-amazon.com/images/I/71XnLIh6Q1L._AC_SX466_.jpg",
+      "image_url": "imgs/amz004.webp",
       "pros": [
         "Strong value for features",
         "Versatile styling attachments"
@@ -154,7 +154,7 @@ const EMBEDDED_DATA = {
       "rating": 4.3,
       "review_count": 1200,
       "product_url": "https://www.amazon.com/dp/B0DFSW1W4H",
-      "image_url": "https://m.media-amazon.com/images/I/71Hwa4HAU2L._AC_SX466_.jpg",
+      "image_url": "imgs/amz005.webp",
       "pros": [
         "Many attachments in one kit",
         "Affordable entry point"
@@ -174,7 +174,7 @@ const EMBEDDED_DATA = {
       "rating": 4.6,
       "review_count": 2400,
       "product_url": "https://www.amazon.com/dp/B0DGRQXTH9",
-      "image_url": "https://m.media-amazon.com/images/I/71peS9pCdML._AC_SX466_.jpg",
+      "image_url": "imgs/amz006.webp",
       "pros": [
         "Fast convert between dry and style modes",
         "Good barrel airflow"
@@ -194,7 +194,7 @@ const EMBEDDED_DATA = {
       "rating": 4.4,
       "review_count": 1100,
       "product_url": "https://www.amazon.com/dp/B0D3NTPQQG",
-      "image_url": "https://images-na.ssl-images-amazon.com/images/I/81FTqNkWZbL._AC_UL165_SR165%2C165_.jpg",
+      "image_url": "imgs/amz008.webp",
       "pros": [
         "Balanced weight and grip",
         "Solid blowout finish"
@@ -214,7 +214,7 @@ const EMBEDDED_DATA = {
       "rating": 4.5,
       "review_count": 1500,
       "product_url": "https://www.amazon.com/dp/B0DMXJXWH3",
-      "image_url": "https://images-na.ssl-images-amazon.com/images/I/51yPrzJk1sL._AC_UL165_SR165%2C165_.jpg",
+      "image_url": "imgs/amz009.webp",
       "pros": [
         "Low-heat styling approach",
         "Premium finish quality"
@@ -234,7 +234,7 @@ const EMBEDDED_DATA = {
       "rating": 4.4,
       "review_count": 1700,
       "product_url": "https://www.amazon.com/dp/B0DDYDWVD1",
-      "image_url": "https://images-na.ssl-images-amazon.com/images/I/71BBttuLWdL._AC_UL165_SR165%2C165_.jpg",
+      "image_url": "imgs/amz010.webp",
       "pros": [
         "Fast dry time for price",
         "Fold-friendly design"
@@ -254,7 +254,7 @@ const EMBEDDED_DATA = {
       "rating": 4.6,
       "review_count": 731,
       "product_url": "https://www.amazon.com/dp/B0CF391P2L",
-      "image_url": "https://m.media-amazon.com/images/I/3101eI6zMNL._AC_SR360,460.jpg",
+      "image_url": "imgs/amz011.webp",
       "pros": [
         "Strong airflow with controlled heat",
         "Lighter premium Dyson entry point"
@@ -274,7 +274,7 @@ const EMBEDDED_DATA = {
       "rating": 4.3,
       "review_count": 39696,
       "product_url": "https://www.amazon.com/dp/B096SVJZSW",
-      "image_url": "https://m.media-amazon.com/images/I/61jFEM8k2dL._AC_SY300_SX300_QL70_ML2_.jpg",
+      "image_url": "imgs/amz013.webp",
       "pros": [
         "Very high review confidence and broad buyer adoption",
         "Fast smoothing and volume in one pass"
@@ -555,17 +555,31 @@ function extractAmazonImageToken(url) {
 }
 
 function toAmazonSizedImage(url, size) {
+  const clean = safeUrl(url);
+  if (clean === '#') return clean;
   const token = extractAmazonImageToken(url);
-  if (!token) return safeUrl(url);
-  return `https://m.media-amazon.com/images/I/${token}._SL${size}_.jpg`;
+  if (!token) return clean;
+  try {
+    const parsed = new URL(clean);
+    return `${parsed.origin}/images/I/${token}._SL${size}_.jpg`;
+  } catch (err) {
+    return clean;
+  }
 }
 
 function buildAmazonSrcSet(url, widths) {
+  const clean = safeUrl(url);
+  if (clean === '#') return '';
   const token = extractAmazonImageToken(url);
   if (!token) return '';
-  return widths
-    .map((width) => `https://m.media-amazon.com/images/I/${token}._SL${width}_.jpg ${width}w`)
-    .join(', ');
+  try {
+    const parsed = new URL(clean);
+    return widths
+      .map((width) => `${parsed.origin}/images/I/${token}._SL${width}_.jpg ${width}w`)
+      .join(', ');
+  } catch (err) {
+    return '';
+  }
 }
 
 function toMoney(price) {

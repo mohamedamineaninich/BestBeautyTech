@@ -174,17 +174,31 @@ function extractAmazonImageToken(url) {
 }
 
 function toAmazonSizedImage(url, size) {
+  const clean = safeUrl(url);
+  if (clean === '#') return clean;
   const token = extractAmazonImageToken(url);
-  if (!token) return safeUrl(url);
-  return `https://m.media-amazon.com/images/I/${token}._SL${size}_.jpg`;
+  if (!token) return clean;
+  try {
+    const parsed = new URL(clean);
+    return `${parsed.origin}/images/I/${token}._SL${size}_.jpg`;
+  } catch (err) {
+    return clean;
+  }
 }
 
 function buildAmazonSrcSet(url, widths) {
+  const clean = safeUrl(url);
+  if (clean === '#') return '';
   const token = extractAmazonImageToken(url);
   if (!token) return '';
-  return widths
-    .map((width) => `https://m.media-amazon.com/images/I/${token}._SL${width}_.jpg ${width}w`)
-    .join(', ');
+  try {
+    const parsed = new URL(clean);
+    return widths
+      .map((width) => `${parsed.origin}/images/I/${token}._SL${width}_.jpg ${width}w`)
+      .join(', ');
+  } catch (err) {
+    return '';
+  }
 }
 
 function getImageCandidateUrl(item) {
