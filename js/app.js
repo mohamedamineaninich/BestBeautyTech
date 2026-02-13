@@ -703,8 +703,8 @@ function enrichProducts(data) {
     return {
       ...product,
       image_url: toAmazonSizedImage(originalImageUrl, 1200),
-      image_card: toAmazonSizedImage(originalImageUrl, 640),
-      image_card_srcset: buildAmazonSrcSet(originalImageUrl, [240, 320, 420, 560, 640, 720]),
+      image_card: toAmazonSizedImage(originalImageUrl, 560),
+      image_card_srcset: buildAmazonSrcSet(originalImageUrl, [240, 320, 420, 560]),
       image_featured: toAmazonSizedImage(originalImageUrl, 1200),
       image_featured_srcset: buildAmazonSrcSet(originalImageUrl, [640, 960, 1200, 1500]),
       image_thumb: toAmazonSizedImage(originalImageUrl, 640),
