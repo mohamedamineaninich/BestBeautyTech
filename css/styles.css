@@ -438,9 +438,11 @@ main {
 .weight-track span {
   display: block;
   height: 100%;
-  width: 0%;
+  width: 100%;
   border-radius: inherit;
-  transition: width 0.5s ease;
+  transform-origin: left center;
+  transform: scaleX(var(--fill-scale, 0));
+  transition: transform 0.5s ease;
 
 }
 #formulaQualityBar {

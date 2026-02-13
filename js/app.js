@@ -797,9 +797,9 @@ function renderHomeRankingCard(data, products) {
   if (qualityWeightEl) qualityWeightEl.textContent = `${qualityPct}%`;
   if (reviewWeightEl) reviewWeightEl.textContent = `${reviewPct}%`;
   if (valueWeightEl) valueWeightEl.textContent = `${valuePct}%`;
-  if (qualityBar) qualityBar.style.width = `${qualityPct}%`;
-  if (reviewBar) reviewBar.style.width = `${reviewPct}%`;
-  if (valueBar) valueBar.style.width = `${valuePct}%`;
+  if (qualityBar) qualityBar.style.setProperty('--fill-scale', String(qualityPct / 100));
+  if (reviewBar) reviewBar.style.setProperty('--fill-scale', String(reviewPct / 100));
+  if (valueBar) valueBar.style.setProperty('--fill-scale', String(valuePct / 100));
 }
 
 function renderHomeFaq() {
