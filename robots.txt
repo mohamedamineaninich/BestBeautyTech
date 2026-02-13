@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /scripts/
 
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://bestbeautytech.pages.dev/sitemap.xml
