@@ -18,7 +18,7 @@
       "rating": 4.4,
       "review_count": 609,
       "product_url": "https://www.amazon.com/dp/B0F96N2BP8",
-      "image_url": "imgs/amz001.webp",
+      "image_url": "imgs/amz001.avif",
       "pros": [
         "Intelligent scalp-protect mode",
         "High-speed airflow"
@@ -38,7 +38,7 @@
       "rating": 4.6,
       "review_count": 4200,
       "product_url": "https://www.amazon.com/dp/B0B4T6RTZ2",
-      "image_url": "imgs/amz002.webp",
+      "image_url": "imgs/amz002.avif",
       "pros": [
         "Strong motor performance",
         "Consistent temperature control"
@@ -58,7 +58,7 @@
       "rating": 4.5,
       "review_count": 180,
       "product_url": "https://www.amazon.com/dp/B0DMXBBK36",
-      "image_url": "imgs/amz003.webp",
+      "image_url": "imgs/amz003.avif",
       "pros": [
         "Pro-level airflow geometry",
         "Light in hand for long sessions"
@@ -78,7 +78,7 @@
       "rating": 4.5,
       "review_count": 7600,
       "product_url": "https://www.amazon.com/dp/B0B89P16MC",
-      "image_url": "imgs/amz004.webp",
+      "image_url": "imgs/amz004.avif",
       "pros": [
         "Strong value for features",
         "Versatile styling attachments"
@@ -98,7 +98,7 @@
       "rating": 4.3,
       "review_count": 1200,
       "product_url": "https://www.amazon.com/dp/B0DFSW1W4H",
-      "image_url": "imgs/amz005.webp",
+      "image_url": "imgs/amz005.avif",
       "pros": [
         "Many attachments in one kit",
         "Affordable entry point"
@@ -118,7 +118,7 @@
       "rating": 4.6,
       "review_count": 2400,
       "product_url": "https://www.amazon.com/dp/B0DGRQXTH9",
-      "image_url": "imgs/amz006.webp",
+      "image_url": "imgs/amz006.avif",
       "pros": [
         "Fast convert between dry and style modes",
         "Good barrel airflow"
@@ -138,7 +138,7 @@
       "rating": 4.4,
       "review_count": 1100,
       "product_url": "https://www.amazon.com/dp/B0D3NTPQQG",
-      "image_url": "imgs/amz008.webp",
+      "image_url": "imgs/amz008.avif",
       "pros": [
         "Balanced weight and grip",
         "Solid blowout finish"
@@ -158,7 +158,7 @@
       "rating": 4.5,
       "review_count": 1500,
       "product_url": "https://www.amazon.com/dp/B0DMXJXWH3",
-      "image_url": "imgs/amz009.webp",
+      "image_url": "imgs/amz009.avif",
       "pros": [
         "Low-heat styling approach",
         "Premium finish quality"
@@ -178,7 +178,7 @@
       "rating": 4.4,
       "review_count": 1700,
       "product_url": "https://www.amazon.com/dp/B0DDYDWVD1",
-      "image_url": "imgs/amz010.webp",
+      "image_url": "imgs/amz010.avif",
       "pros": [
         "Fast dry time for price",
         "Fold-friendly design"
@@ -198,7 +198,7 @@
       "rating": 4.6,
       "review_count": 731,
       "product_url": "https://www.amazon.com/dp/B0CF391P2L",
-      "image_url": "imgs/amz011.webp",
+      "image_url": "imgs/amz011.avif",
       "pros": [
         "Strong airflow with controlled heat",
         "Lighter premium Dyson entry point"
@@ -218,7 +218,7 @@
       "rating": 4.3,
       "review_count": 39696,
       "product_url": "https://www.amazon.com/dp/B096SVJZSW",
-      "image_url": "imgs/amz013.webp",
+      "image_url": "imgs/amz013.avif",
       "pros": [
         "Very high review confidence and broad buyer adoption",
         "Fast smoothing and volume in one pass"

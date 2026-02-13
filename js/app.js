@@ -1,4 +1,4 @@
-﻿const DATA_URL = 'data/products.json';
+const DATA_URL = 'data/products.json';
 
 const AMAZON_AFFILIATE_TAG = 'bestbeautytech-20';
 
@@ -74,7 +74,7 @@ const EMBEDDED_DATA = {
       "rating": 4.4,
       "review_count": 609,
       "product_url": "https://www.amazon.com/dp/B0F96N2BP8",
-      "image_url": "imgs/amz001.webp",
+      "image_url": "imgs/amz001.avif",
       "pros": [
         "Intelligent scalp-protect mode",
         "High-speed airflow"
@@ -94,7 +94,7 @@ const EMBEDDED_DATA = {
       "rating": 4.6,
       "review_count": 4200,
       "product_url": "https://www.amazon.com/dp/B0B4T6RTZ2",
-      "image_url": "imgs/amz002.webp",
+      "image_url": "imgs/amz002.avif",
       "pros": [
         "Strong motor performance",
         "Consistent temperature control"
@@ -114,7 +114,7 @@ const EMBEDDED_DATA = {
       "rating": 4.5,
       "review_count": 180,
       "product_url": "https://www.amazon.com/dp/B0DMXBBK36",
-      "image_url": "imgs/amz003.webp",
+      "image_url": "imgs/amz003.avif",
       "pros": [
         "Pro-level airflow geometry",
         "Light in hand for long sessions"
@@ -134,7 +134,7 @@ const EMBEDDED_DATA = {
       "rating": 4.5,
       "review_count": 7600,
       "product_url": "https://www.amazon.com/dp/B0B89P16MC",
-      "image_url": "imgs/amz004.webp",
+      "image_url": "imgs/amz004.avif",
       "pros": [
         "Strong value for features",
         "Versatile styling attachments"
@@ -154,7 +154,7 @@ const EMBEDDED_DATA = {
       "rating": 4.3,
       "review_count": 1200,
       "product_url": "https://www.amazon.com/dp/B0DFSW1W4H",
-      "image_url": "imgs/amz005.webp",
+      "image_url": "imgs/amz005.avif",
       "pros": [
         "Many attachments in one kit",
         "Affordable entry point"
@@ -174,7 +174,7 @@ const EMBEDDED_DATA = {
       "rating": 4.6,
       "review_count": 2400,
       "product_url": "https://www.amazon.com/dp/B0DGRQXTH9",
-      "image_url": "imgs/amz006.webp",
+      "image_url": "imgs/amz006.avif",
       "pros": [
         "Fast convert between dry and style modes",
         "Good barrel airflow"
@@ -194,7 +194,7 @@ const EMBEDDED_DATA = {
       "rating": 4.4,
       "review_count": 1100,
       "product_url": "https://www.amazon.com/dp/B0D3NTPQQG",
-      "image_url": "imgs/amz008.webp",
+      "image_url": "imgs/amz008.avif",
       "pros": [
         "Balanced weight and grip",
         "Solid blowout finish"
@@ -214,7 +214,7 @@ const EMBEDDED_DATA = {
       "rating": 4.5,
       "review_count": 1500,
       "product_url": "https://www.amazon.com/dp/B0DMXJXWH3",
-      "image_url": "imgs/amz009.webp",
+      "image_url": "imgs/amz009.avif",
       "pros": [
         "Low-heat styling approach",
         "Premium finish quality"
@@ -234,7 +234,7 @@ const EMBEDDED_DATA = {
       "rating": 4.4,
       "review_count": 1700,
       "product_url": "https://www.amazon.com/dp/B0DDYDWVD1",
-      "image_url": "imgs/amz010.webp",
+      "image_url": "imgs/amz010.avif",
       "pros": [
         "Fast dry time for price",
         "Fold-friendly design"
@@ -254,7 +254,7 @@ const EMBEDDED_DATA = {
       "rating": 4.6,
       "review_count": 731,
       "product_url": "https://www.amazon.com/dp/B0CF391P2L",
-      "image_url": "imgs/amz011.webp",
+      "image_url": "imgs/amz011.avif",
       "pros": [
         "Strong airflow with controlled heat",
         "Lighter premium Dyson entry point"
@@ -274,7 +274,7 @@ const EMBEDDED_DATA = {
       "rating": 4.3,
       "review_count": 39696,
       "product_url": "https://www.amazon.com/dp/B096SVJZSW",
-      "image_url": "imgs/amz013.webp",
+      "image_url": "imgs/amz013.avif",
       "pros": [
         "Very high review confidence and broad buyer adoption",
         "Fast smoothing and volume in one pass"
@@ -1276,7 +1276,7 @@ function createLongReview(product, products) {
 
     `Performance-wise, this product competes well in <strong>${safeCategory}</strong> because airflow and thermal behavior stay balanced under continuous use. In plain terms, you can move faster without pushing heat to uncomfortable extremes, which lowers the risk of over-correcting sections late in the routine. If your target style is smooth, controlled movement with less frizz rebound, the stability profile here is a real advantage. Another positive point is that the device responds predictably once you find your sectioning rhythm. That repeatability is the foundation of better morning outcomes. Instead of chasing perfect technique every day, the tool provides enough consistency that results stay close to your baseline even when you are short on time.`,
 
-    `When compared with peer listings in the same category, the benchmark picture is useful. Category average rating is <strong>${insight.avgRating.toFixed(2)}/5</strong>, category average price is <strong>$${insight.avgPrice.toFixed(0)}</strong>, and average visible review volume is <strong>${formatInt(insight.avgReviews)}</strong>. Against that baseline, this listing is <strong>${priceDeltaText}</strong> vs average price and still maintains competitive social proof. The most reviewed peer in this group is <strong>${mostReviewedName}</strong>, which gives context for confidence in the broader segment. The key question is not “is this the absolute cheapest,” but “does this model deliver more reliable outputs per session than alternatives in the same spend band.”`,
+    `When compared with peer listings in the same category, the benchmark picture is useful. Category average rating is <strong>${insight.avgRating.toFixed(2)}/5</strong>, category average price is <strong>$${insight.avgPrice.toFixed(0)}</strong>, and average visible review volume is <strong>${formatInt(insight.avgReviews)}</strong>. Against that baseline, this listing is <strong>${priceDeltaText}</strong> vs average price and still maintains competitive social proof. The most reviewed peer in this group is <strong>${mostReviewedName}</strong>, which gives context for confidence in the broader segment. The key question is not �is this the absolute cheapest,� but �does this model deliver more reliable outputs per session than alternatives in the same spend band.�`,
 
     `Day-to-day usability also depends on setup friction and attachment logic. The strongest setups are the ones that reduce mental overhead during styling, and this listing does that reasonably well. You can move between core tasks without repeatedly resetting your process. If you style several times a week, that is where value compounds. A product that saves even a few minutes per routine and reduces redo passes can create a meaningful quality-of-life improvement over a quarter. In this listing, the practical best-fit use case remains <strong>${safeBestFor}</strong>. That focus helps you decide quickly whether the tool matches your primary routine rather than following trends alone.`,
 
@@ -1305,14 +1305,14 @@ function createLongReview(product, products) {
   const listingVisuals = [product, ...insight.topByScore].slice(0, 4);
   const visualsHtml = listingVisuals
     .map((item, index) => {
-      const label = index === 0 ? '🎯 Current Listing' : `📌 Peer #${index}`;
+      const label = index === 0 ? '?? Current Listing' : `?? Peer #${index}`;
       return `
         <div class="review-thumb">
           <img src="${escapeHtml(item.image_thumb || item.image_url)}" ${item.image_thumb_srcset ? `srcset="${escapeHtml(item.image_thumb_srcset)}"` : ''} sizes="(width <= 680px) 44vw, 180px" alt="${escapeHtml(item.name)}" loading="lazy" fetchpriority="low" decoding="async" width="420" height="320">
           <div class="review-thumb-meta">
             <div class="review-thumb-title">${label}</div>
             <div class="review-thumb-name">${escapeHtml(item.name)}</div>
-            <div class="review-thumb-stats">⭐ ${Number(item.rating).toFixed(1)} | ${formatInt(item.review_count)} reviews | $${toMoney(item.price)}</div>
+            <div class="review-thumb-stats">? ${Number(item.rating).toFixed(1)} | ${formatInt(item.review_count)} reviews | $${toMoney(item.price)}</div>
           </div>
         </div>
       `;
@@ -1320,16 +1320,16 @@ function createLongReview(product, products) {
     .join('');
 
   const htmlParts = [
-    '<h3>🧭 Snapshot</h3>',
+    '<h3>?? Snapshot</h3>',
     `<div class="review-stat-grid">
-      <div class="review-stat"><span class="review-stat-label">🏆 Rank In Category</span><strong>#${insight.rank} / ${insight.count}</strong></div>
-      <div class="review-stat"><span class="review-stat-label">⭐ Normalized Rating</span><strong>${ratingValue}</strong></div>
-      <div class="review-stat"><span class="review-stat-label">💰 Price vs Category Avg</span><strong>${priceDeltaText}</strong></div>
-      <div class="review-stat"><span class="review-stat-label">👥 Avg Reviews In Segment</span><strong>${formatInt(insight.avgReviews)}</strong></div>
+      <div class="review-stat"><span class="review-stat-label">?? Rank In Category</span><strong>#${insight.rank} / ${insight.count}</strong></div>
+      <div class="review-stat"><span class="review-stat-label">? Normalized Rating</span><strong>${ratingValue}</strong></div>
+      <div class="review-stat"><span class="review-stat-label">?? Price vs Category Avg</span><strong>${priceDeltaText}</strong></div>
+      <div class="review-stat"><span class="review-stat-label">?? Avg Reviews In Segment</span><strong>${formatInt(insight.avgReviews)}</strong></div>
     </div>`,
-    '<h3>📸 Amazon Listing Visual Benchmarks</h3>',
+    '<h3>?? Amazon Listing Visual Benchmarks</h3>',
     `<div class="review-thumb-grid">${visualsHtml}</div>`,
-    '<h3>📝 Detailed Assessment</h3>'
+    '<h3>?? Detailed Assessment</h3>'
   ];
 
   paragraphs.forEach((paragraph) => {
