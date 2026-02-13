@@ -703,8 +703,8 @@ function enrichProducts(data) {
     return {
       ...product,
       image_url: toAmazonSizedImage(originalImageUrl, 1200),
-      image_card: toAmazonSizedImage(originalImageUrl, 960),
-      image_card_srcset: buildAmazonSrcSet(originalImageUrl, [320, 480, 640, 800, 960, 1200]),
+      image_card: toAmazonSizedImage(originalImageUrl, 640),
+      image_card_srcset: buildAmazonSrcSet(originalImageUrl, [240, 320, 420, 560, 640, 720]),
       image_featured: toAmazonSizedImage(originalImageUrl, 1200),
       image_featured_srcset: buildAmazonSrcSet(originalImageUrl, [640, 960, 1200, 1500]),
       image_thumb: toAmazonSizedImage(originalImageUrl, 640),
@@ -717,6 +717,8 @@ function enrichProducts(data) {
 
 function renderTop10(container, products, options = {}) {
   const eagerCount = Number(options.eagerCount) || 0;
+  const imageSizes =
+    options.imageSizes || '(max-width: 900px) 94vw, (max-width: 1200px) 45vw, 30vw';
   container.innerHTML = '';
 
   if (!products.length) {
@@ -739,7 +741,7 @@ function renderTop10(container, products, options = {}) {
 
     card.innerHTML = `
       <div class="card-media">
-        <img src="${escapeHtml(imageUrl)}" ${imageSrcSet} sizes="(width <= 680px) 94vw, (width <= 1024px) 45vw, 30vw" alt="${escapeHtml(product.name)}" loading="${loadingMode}" fetchpriority="${fetchPriority}" decoding="async" width="960" height="720">
+        <img src="${escapeHtml(imageUrl)}" ${imageSrcSet} sizes="${escapeHtml(imageSizes)}" alt="${escapeHtml(product.name)}" loading="${loadingMode}" fetchpriority="${fetchPriority}" decoding="async" width="960" height="720">
       </div>
       <div class="label">#${index + 1} | ${escapeHtml(product.tool_type)}</div>
       <div class="title">${escapeHtml(product.name)}</div>
@@ -1334,8 +1336,6 @@ async function initHome() {
   populateToolFilter(products);
   renderStats(data, products);
   renderHomeRankingCard(data, products);
-  const homeFaqItems = renderHomeFaq();
-  injectHomeStructuredData(data, products, homeFaqItems);
 
   const toolFilter = document.getElementById('toolFilter');
   const sortBy = document.getElementById('sortBy');
@@ -1358,6 +1358,18 @@ async function initHome() {
       return [product.id, searchableText];
     })
   );
+
+  function scheduleNonCritical(task) {
+    if (typeof window === 'undefined') {
+      task();
+      return;
+    }
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(task, { timeout: 1500 });
+      return;
+    }
+    window.setTimeout(task, 0);
+  }
 
   function normalizeQuery(value) {
     return String(value || '')
@@ -1382,7 +1394,12 @@ async function initHome() {
       });
     }
 
-    renderTop10(grid, applySort(filtered, sort), { eagerCount: 2 });
+    const eagerCount =
+      typeof window !== 'undefined' && window.matchMedia('(min-width: 901px)').matches ? 1 : 0;
+    renderTop10(grid, applySort(filtered, sort), {
+      eagerCount,
+      imageSizes: '(max-width: 900px) 94vw, (max-width: 1200px) 45vw, 30vw'
+    });
 
     if (quickFinderSummary) {
       const facets = [];
@@ -1395,10 +1412,30 @@ async function initHome() {
     }
   }
 
-  if (toolFilter) toolFilter.addEventListener('change', update);
-  if (sortBy) sortBy.addEventListener('change', update);
-  if (quickFinder) quickFinder.addEventListener('input', update);
-  update();
+  let hasRenderedHomeList = false;
+  let hasInjectedHomeSchema = false;
+
+  function ensureHomeReady() {
+    if (!hasInjectedHomeSchema) {
+      hasInjectedHomeSchema = true;
+      const homeFaqItems = renderHomeFaq();
+      injectHomeStructuredData(data, products, homeFaqItems);
+    }
+    if (!hasRenderedHomeList) {
+      hasRenderedHomeList = true;
+      update();
+    }
+  }
+
+  const onControlUpdate = () => {
+    ensureHomeReady();
+    update();
+  };
+
+  if (toolFilter) toolFilter.addEventListener('change', onControlUpdate);
+  if (sortBy) sortBy.addEventListener('change', onControlUpdate);
+  if (quickFinder) quickFinder.addEventListener('input', onControlUpdate);
+  scheduleNonCritical(ensureHomeReady);
 }
 
 async function initCategory() {
