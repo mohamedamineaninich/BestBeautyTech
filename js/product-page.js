@@ -12,7 +12,9 @@ function getSiteConfig() {
 function toAbsoluteUrl(rawUrl) {
   const value = String(rawUrl || '').trim();
   if (!value) return '';
-  const base = typeof window !== 'undefined' && window.location ? window.location.href : 'http://localhost/';
+  const base = typeof document !== 'undefined' && document.baseURI
+    ? document.baseURI
+    : (typeof window !== 'undefined' && window.location ? window.location.href : 'http://localhost/');
   try {
     return new URL(value, base).toString();
   } catch (err) {
@@ -103,7 +105,8 @@ function countWords(text) {
 function safeUrl(url) {
   if (!url) return '#';
   try {
-    return new URL(url, window.location.href).toString();
+    const base = typeof document !== 'undefined' && document.baseURI ? document.baseURI : window.location.href;
+    return new URL(url, base).toString();
   } catch (err) {
     return '#';
   }
@@ -489,6 +492,24 @@ function normalizeDedupeText(value) {
     .replace(/[''"]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function slugifyUrlPart(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function getProductReviewUrl(product) {
+  const slug = slugifyUrlPart(product?.name || product?.id);
+  return slug ? `/reviews/${slug}/` : '/product.html';
+}
+
+function getCategoryUrl(toolType) {
+  const slug = slugifyUrlPart(toolType);
+  return slug ? `/categories/${slug}/` : '/category.html';
 }
 
 function tokenizeForDedupe(value) {
@@ -1061,18 +1082,18 @@ function renderHero(product, insight) {
   const crumbCategory = document.getElementById('crumbCategory');
   if (crumbCategory) {
     crumbCategory.textContent = product.tool_type;
-    crumbCategory.setAttribute('href', `category.html?tool=${encodeURIComponent(product.tool_type)}`);
+    crumbCategory.setAttribute('href', getCategoryUrl(product.tool_type));
   }
   setText('crumbProduct', product.name);
 
   const categoryGuideLink = document.getElementById('categoryGuideLink');
   if (categoryGuideLink) {
-    categoryGuideLink.setAttribute('href', `category.html?tool=${encodeURIComponent(product.tool_type)}`);
+    categoryGuideLink.setAttribute('href', getCategoryUrl(product.tool_type));
   }
 
   const guideSignal = document.getElementById('guideSignal');
   if (guideSignal) {
-    guideSignal.innerHTML = `Part of our <a id="categoryGuideLink" href="category.html?tool=${encodeURIComponent(product.tool_type)}">${escapeHtml(product.tool_type)} Buyer’s Guide</a>. For broader context, see our <a href="index.html#top10">Top-Rated Hair Tools Guide</a> and <a href="about.html">editorial methodology</a>.`;
+    guideSignal.innerHTML = `Part of our <a id="categoryGuideLink" href="${getCategoryUrl(product.tool_type)}">${escapeHtml(product.tool_type)} Buyer’s Guide</a>. For broader context, see our <a href="index.html#top10">Top-Rated Hair Tools Guide</a> and <a href="about.html">editorial methodology</a>.`;
   }
 
   const specs = [
@@ -1134,8 +1155,7 @@ function renderHero(product, insight) {
     if (mediaImage.srcset) preloadNode.setAttribute('imagesrcset', mediaImage.srcset);
   }
 
-  const canonicalUrl = new URL(window.location.href);
-  canonicalUrl.searchParams.set('id', product.id);
+  const canonicalUrl = new URL(getProductReviewUrl(product), window.location.href);
   const canonicalNode = document.getElementById('canonicalLink');
   if (canonicalNode) canonicalNode.setAttribute('href', canonicalUrl.toString());
   document.querySelectorAll('link[rel="alternate"]').forEach((node) => {
@@ -1328,7 +1348,7 @@ function renderComparison(product, products, insight) {
         <td>${formatInt(item.review_count)}</td>
         <td>${formatCurrency(item.price)}</td>
         <td>${escapeHtml(item.best_for)}</td>
-        <td><a href="${item.id === product.id ? escapeHtml(toAffiliateAmazonUrl(item.product_url)) : `product.html?id=${encodeURIComponent(item.id)}`}" ${item.id === product.id ? `target="_blank" rel="${AFFILIATE_REL}" data-track="cta-comparison-price"` : 'data-track="cta-comparison-review"'}>${item.id === product.id ? 'Check price' : 'Read review'}</a></td>
+        <td><a href="${item.id === product.id ? escapeHtml(toAffiliateAmazonUrl(item.product_url)) : getProductReviewUrl(item)}" ${item.id === product.id ? `target="_blank" rel="${AFFILIATE_REL}" data-track="cta-comparison-price"` : 'data-track="cta-comparison-review"'}>${item.id === product.id ? 'Check price' : 'Read review'}</a></td>
       </tr>
     `
     )
@@ -1428,7 +1448,7 @@ function renderInternalLinks(product, products) {
     underBudgetTarget.innerHTML = underBudget
       .map(
         (item) => `
-        <a class="internal-link" href="product.html?id=${encodeURIComponent(item.id)}">
+        <a class="internal-link" href="${getProductReviewUrl(item)}">
           <strong>${escapeHtml(item.name)}</strong>
           <span>${formatCurrency(item.price)} | ${escapeHtml(item.tool_type)} | score ${Number(item.score).toFixed(2)}</span>
         </a>
@@ -1447,14 +1467,14 @@ function renderInternalLinks(product, products) {
       ? sameBrand
           .map(
             (item) => `
-            <a class="internal-link" href="product.html?id=${encodeURIComponent(item.id)}">
+            <a class="internal-link" href="${getProductReviewUrl(item)}">
               <strong>${escapeHtml(item.name)}</strong>
               <span>${escapeHtml(item.tool_type)} | ${Number(item.rating).toFixed(1)}/5 | ${formatInt(item.review_count)} reviews</span>
             </a>
           `
           )
           .join('')
-      : '<a class="internal-link" href="category.html"><strong>No same-brand peers currently in this data set.</strong><span>Browse category alternatives.</span></a>';
+      : `<a class="internal-link" href="${getCategoryUrl(product.tool_type)}"><strong>No same-brand peers currently in this data set.</strong><span>Browse category alternatives.</span></a>`;
   }
 }
 function renderRelated(product, products, insight) {
@@ -1477,7 +1497,7 @@ function renderRelated(product, products, insight) {
           <img src="${escapeHtml(item.image_thumb || item.image_url)}" ${item.image_thumb_srcset ? `srcset="${escapeHtml(item.image_thumb_srcset)}"` : ''} sizes="(width <= 680px) 90vw, 22vw" alt="${escapeHtml(item.name)} product image" loading="lazy" decoding="async" width="640" height="480">
           <h3>${escapeHtml(item.name)}</h3>
           <p>${formatCurrency(item.price)} · ${Number(item.rating).toFixed(1)}/5</p>
-          <a href="product.html?id=${encodeURIComponent(item.id)}">Read full review</a>
+          <a href="${getProductReviewUrl(item)}">Read full review</a>
         </article>
       `
       )
@@ -1493,7 +1513,7 @@ function renderRelated(product, products, insight) {
         <article class="mini-related-card">
           <strong>${escapeHtml(item.name)}</strong>
           <span>${formatCurrency(item.price)} · ${Number(item.rating).toFixed(1)}/5</span>
-          <a href="product.html?id=${encodeURIComponent(item.id)}">View comparison</a>
+          <a href="${getProductReviewUrl(item)}">View comparison</a>
         </article>
       `
       )
@@ -1511,7 +1531,7 @@ function renderRelated(product, products, insight) {
           <div class="title">${escapeHtml(item.name)}</div>
           <div class="meta"><span>${Number(item.rating).toFixed(1)}/5</span><span>${formatInt(item.review_count)} reviews</span><span>${formatCurrency(item.price)}</span></div>
           <div class="score-row"><span class="score">Score ${Number(item.score).toFixed(2)}</span></div>
-          <div class="card-actions"><a href="product.html?id=${encodeURIComponent(item.id)}">Read review</a></div>
+          <div class="card-actions"><a href="${getProductReviewUrl(item)}">Read review</a></div>
         </article>
       `
       )
@@ -1520,8 +1540,7 @@ function renderRelated(product, products, insight) {
 }
 
 function renderSocialShare(product) {
-  const pageUrl = new URL(window.location.href);
-  pageUrl.searchParams.set('id', product.id);
+  const pageUrl = new URL(getProductReviewUrl(product), window.location.href);
 
   const encodedUrl = encodeURIComponent(pageUrl.toString());
   const encodedTitle = encodeURIComponent(`${product.name} Review`);
@@ -1689,11 +1708,9 @@ function enableSmoothScrollFallback() {
 }
 
 function injectSchemas(product, insight, faqItems, reviewData, availability = resolveAvailability(product)) {
-  const pageUrl = new URL(window.location.href);
-  pageUrl.searchParams.set('id', product.id);
+  const pageUrl = new URL(getProductReviewUrl(product), window.location.href);
 
-  const categoryUrl = new URL('category.html', window.location.href);
-  categoryUrl.searchParams.set('tool', product.tool_type);
+  const categoryUrl = new URL(getCategoryUrl(product.tool_type), window.location.href);
 
   const articlePublished = document.getElementById('articlePublishedTime')?.getAttribute('content') || new Date().toISOString().slice(0, 10);
   const articleModified = document.getElementById('articleModifiedTime')?.getAttribute('content') || new Date().toISOString().slice(0, 10);

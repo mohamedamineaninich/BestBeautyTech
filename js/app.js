@@ -11,7 +11,9 @@ function getSiteConfig() {
 function toAbsoluteUrl(rawUrl) {
   const value = String(rawUrl || '').trim();
   if (!value) return '';
-  const base = typeof window !== 'undefined' && window.location ? window.location.href : 'http://localhost/';
+  const base = typeof document !== 'undefined' && document.baseURI
+    ? document.baseURI
+    : (typeof window !== 'undefined' && window.location ? window.location.href : 'http://localhost/');
   try {
     return new URL(value, base).toString();
   } catch (err) {
@@ -341,7 +343,9 @@ function setMetaContentById(id, content) {
 
 function safeUrl(url) {
   if (!url) return '#';
-  const base = typeof window !== 'undefined' && window.location ? window.location.href : 'http://localhost/';
+  const base = typeof document !== 'undefined' && document.baseURI
+    ? document.baseURI
+    : (typeof window !== 'undefined' && window.location ? window.location.href : 'http://localhost/');
   try {
     return new URL(url, base).toString();
   } catch (err) {
@@ -356,6 +360,24 @@ function normalizeDedupeText(value) {
     .replace(/[''"]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function slugifyUrlPart(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function getProductReviewUrl(product) {
+  const slug = slugifyUrlPart(product?.name || product?.id);
+  return slug ? `/reviews/${slug}/` : '/product.html';
+}
+
+function getCategoryUrl(toolType) {
+  const slug = slugifyUrlPart(toolType);
+  return slug ? `/categories/${slug}/` : '/category.html';
 }
 
 function tokenizeForDedupe(value) {
@@ -747,7 +769,7 @@ function renderTop10(container, products, options = {}) {
     const ratingValue = toReadableRatingValue(product.rating);
     const scoreValue = toScoreValue(product.score);
     const amazonUrl = toAffiliateAmazonUrl(product.product_url);
-    const reviewUrl = `product.html?id=${encodeURIComponent(product.id)}`;
+    const reviewUrl = getProductReviewUrl(product);
     const imageUrl = product.image_card || product.image_url;
     const imageSrcSet = product.image_card_srcset ? `srcset="${escapeHtml(product.image_card_srcset)}"` : '';
     const loadingMode = index < eagerCount ? 'eager' : 'lazy';
@@ -878,7 +900,7 @@ function injectHomeStructuredData(data, products, faqItems) {
           '@type': 'Product',
           name: product.name,
           image: [product.image_url],
-          url: new URL(`product.html?id=${encodeURIComponent(product.id)}`, window.location.href).toString(),
+          url: new URL(getProductReviewUrl(product), window.location.href).toString(),
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: String(product.rating),
@@ -1077,7 +1099,7 @@ function renderInternalLinks(product, products) {
     .slice(0, 6);
 
   const buildLink = (item, note) => `
-    <a class="internal-link" href="product.html?id=${encodeURIComponent(item.id)}">
+    <a class="internal-link" href="${getProductReviewUrl(item)}">
       <strong>${escapeHtml(item.name)}</strong>
       <span>${escapeHtml(note)}</span>
     </a>
@@ -1139,7 +1161,7 @@ function updateProductMeta(product, insight, data, reviewWords) {
   const crumbProduct = document.getElementById('crumbProduct');
   if (crumbCategory) {
     crumbCategory.textContent = product.tool_type;
-    crumbCategory.setAttribute('href', `category.html?tool=${encodeURIComponent(product.tool_type)}`);
+    crumbCategory.setAttribute('href', getCategoryUrl(product.tool_type));
   }
   if (crumbProduct) crumbProduct.textContent = product.name;
 
@@ -1276,7 +1298,7 @@ function createLongReview(product, products) {
 
     `Performance-wise, this product competes well in <strong>${safeCategory}</strong> because airflow and thermal behavior stay balanced under continuous use. In plain terms, you can move faster without pushing heat to uncomfortable extremes, which lowers the risk of over-correcting sections late in the routine. If your target style is smooth, controlled movement with less frizz rebound, the stability profile here is a real advantage. Another positive point is that the device responds predictably once you find your sectioning rhythm. That repeatability is the foundation of better morning outcomes. Instead of chasing perfect technique every day, the tool provides enough consistency that results stay close to your baseline even when you are short on time.`,
 
-    `When compared with peer listings in the same category, the benchmark picture is useful. Category average rating is <strong>${insight.avgRating.toFixed(2)}/5</strong>, category average price is <strong>$${insight.avgPrice.toFixed(0)}</strong>, and average visible review volume is <strong>${formatInt(insight.avgReviews)}</strong>. Against that baseline, this listing is <strong>${priceDeltaText}</strong> vs average price and still maintains competitive social proof. The most reviewed peer in this group is <strong>${mostReviewedName}</strong>, which gives context for confidence in the broader segment. The key question is not “is this the absolute cheapest,” but “does this model deliver more reliable outputs per session than alternatives in the same spend band.”`,
+    `When compared with peer listings in the same category, the benchmark picture is useful. Category average rating is <strong>${insight.avgRating.toFixed(2)}/5</strong>, category average price is <strong>$${insight.avgPrice.toFixed(0)}</strong>, and average visible review volume is <strong>${formatInt(insight.avgReviews)}</strong>. Against that baseline, this listing is <strong>${priceDeltaText}</strong> vs average price and still maintains competitive social proof. The most reviewed peer in this group is <strong>${mostReviewedName}</strong>, which gives context for confidence in the broader segment. The key question is not Â“is this the absolute cheapest,Â” but Â“does this model deliver more reliable outputs per session than alternatives in the same spend band.Â”`,
 
     `Day-to-day usability also depends on setup friction and attachment logic. The strongest setups are the ones that reduce mental overhead during styling, and this listing does that reasonably well. You can move between core tasks without repeatedly resetting your process. If you style several times a week, that is where value compounds. A product that saves even a few minutes per routine and reduces redo passes can create a meaningful quality-of-life improvement over a quarter. In this listing, the practical best-fit use case remains <strong>${safeBestFor}</strong>. That focus helps you decide quickly whether the tool matches your primary routine rather than following trends alone.`,
 
@@ -1472,6 +1494,10 @@ async function initCategory() {
   if (requestedTool) {
     const matchedTool = tools.find((tool) => tool.toLowerCase() === requestedTool.toLowerCase());
     if (matchedTool) select.value = matchedTool;
+  } else {
+    const pathSlug = slugifyUrlPart(window.location.pathname.split('/').filter(Boolean).pop() || '');
+    const matchedTool = tools.find((tool) => slugifyUrlPart(tool) === pathSlug);
+    if (matchedTool) select.value = matchedTool;
   }
 
   function update() {
@@ -1479,9 +1505,7 @@ async function initCategory() {
     title.textContent = `${tool} Picks`;
     const filtered = products.filter((p) => p.tool_type === tool);
     renderTop10(grid, applySort(filtered, 'score'), { eagerCount: 1 });
-    const nextParams = new URLSearchParams(window.location.search);
-    nextParams.set('tool', tool);
-    const nextUrl = `category.html?${nextParams.toString()}`;
+    const nextUrl = getCategoryUrl(tool);
     window.history.replaceState({}, '', nextUrl);
     updateCategoryMeta(tool, filtered, nextUrl);
   }

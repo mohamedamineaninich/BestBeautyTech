@@ -1,8 +1,10 @@
-const CACHE_NAME = 'bbt-product-v2';
+const CACHE_NAME = 'bbt-product-v3';
 const OFFLINE_ASSETS = [
   './',
+  'category.html',
   'product.html',
   'css/styles.css',
+  'js/app.js',
   'js/site-config.js',
   'js/product-page.js',
   'data/products.json'
