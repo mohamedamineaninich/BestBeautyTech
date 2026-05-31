@@ -371,8 +371,9 @@ function slugifyUrlPart(value) {
 }
 
 function getProductReviewUrl(product) {
-  const slug = slugifyUrlPart(product?.name || product?.id);
-  return slug ? `/reviews/${slug}/` : '/product.html';
+  const categorySlug = slugifyUrlPart(product?.tool_type);
+  const productSlug = slugifyUrlPart(product?.name || product?.id);
+  return categorySlug && productSlug ? `/${categorySlug}/${productSlug}/` : '/product.html';
 }
 
 function getCategoryUrl(toolType) {

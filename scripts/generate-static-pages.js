@@ -41,8 +41,8 @@ function priceText(product) {
   return Number.isFinite(price) && price > 0 ? `$${price.toFixed(0)}` : 'Price varies';
 }
 
-function reviewPath(product) {
-  return `reviews/${slugify(product.name)}/`;
+function productPath(product) {
+  return `${slugify(product.tool_type)}/${slugify(product.name)}/`;
 }
 
 function categoryPath(category) {
@@ -76,7 +76,7 @@ function productJsonPayload(product, products, meta) {
 }
 
 function schemaForProduct(product) {
-  const reviewUrl = absolute(reviewPath(product));
+  const productUrl = absolute(productPath(product));
   const imageUrl = `${SITE_URL}/${product.image_url}`;
   const schema = {
     '@context': 'https://schema.org',
@@ -116,7 +116,7 @@ function schemaForProduct(product) {
         worstRating: '1'
       },
       reviewBody: `${product.name} is best for ${product.best_for.toLowerCase()}. Strengths include ${(product.pros || []).join(', ')}. Tradeoffs include ${(product.cons || []).join(', ')}.`,
-      url: reviewUrl
+      url: productUrl
     }
   };
   return JSON.stringify(schema);
@@ -158,7 +158,7 @@ function schemaForReview(product) {
 function buildProductPage(template, product, products, meta) {
   const title = `${product.name} Review: Pros, Cons, Price, and Alternatives | Best Beauty Tech`;
   const description = `${product.name} review for ${product.best_for.toLowerCase()}. See ${product.brand} specs, pros and cons, ${priceText(product)} price context, rating, alternatives, and buyer-fit guidance.`;
-  const canonical = absolute(reviewPath(product));
+  const canonical = absolute(productPath(product));
   const categoryUrl = absolute(categoryPath(product.tool_type));
   const productPayload = productJsonPayload(product, products, meta);
   const pros = (product.pros || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('\n          ');
@@ -236,7 +236,7 @@ function buildCategoryPage(template, category, products) {
           <div class="title">${escapeHtml(product.name)}</div>
           <div class="meta"><span>${escapeHtml(product.rating)}/5</span><span>${escapeHtml(product.review_count)} reviews</span><span>${escapeHtml(priceText(product))}</span></div>
           <p>${escapeHtml(product.best_for)}</p>
-          <div class="card-actions"><a href="${reviewPath(product)}">Read review</a><a href="${escapeAttr(product.product_url)}" target="_blank" rel="nofollow sponsored noopener">Amazon</a></div>
+          <div class="card-actions"><a href="${productPath(product)}">Read review</a><a href="${escapeAttr(product.product_url)}" target="_blank" rel="nofollow sponsored noopener">Amazon</a></div>
         </article>`).join('\n');
 
   let html = addBase(template);
@@ -266,7 +266,7 @@ function buildCategoryPage(template, category, products) {
         '@type': 'ListItem',
         position: index + 1,
         name: product.name,
-        url: absolute(reviewPath(product))
+        url: absolute(productPath(product))
       }))
     }
   })}</script>\n</body>`);
@@ -280,7 +280,7 @@ function buildSitemap(products, categories) {
     ...categories.map((category) => ({ loc: absolute(categoryPath(category)), changefreq: 'weekly', priority: '0.8' })),
     { loc: `${SITE_URL}/about.html`, changefreq: 'monthly', priority: '0.7' },
     { loc: `${SITE_URL}/methodology.html`, changefreq: 'monthly', priority: '0.7' },
-    ...products.map((product) => ({ loc: absolute(reviewPath(product)), changefreq: 'weekly', priority: '0.8' }))
+    ...products.map((product) => ({ loc: absolute(productPath(product)), changefreq: 'weekly', priority: '0.8' }))
   ];
 
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((url) => `  <url>\n    <loc>${url.loc}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>${url.changefreq}</changefreq>\n    <priority>${url.priority}</priority>\n  </url>`).join('\n')}\n</urlset>\n`;
@@ -294,7 +294,7 @@ function main() {
   const categoryTemplate = readText('category.html');
 
   products.forEach((product) => {
-    writeText(path.join(reviewPath(product), 'index.html'), buildProductPage(productTemplate, product, products, data.meta));
+    writeText(path.join(productPath(product), 'index.html'), buildProductPage(productTemplate, product, products, data.meta));
   });
 
   categories.forEach((category) => {
