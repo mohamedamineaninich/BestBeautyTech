@@ -373,12 +373,12 @@ function slugifyUrlPart(value) {
 function getProductReviewUrl(product) {
   const categorySlug = slugifyUrlPart(product?.tool_type);
   const productSlug = slugifyUrlPart(product?.name || product?.id);
-  return categorySlug && productSlug ? `/${categorySlug}/${productSlug}/` : '/product.html';
+  return categorySlug && productSlug ? `/${categorySlug}/${productSlug}/` : '/categories/';
 }
 
 function getCategoryUrl(toolType) {
   const slug = slugifyUrlPart(toolType);
-  return slug ? `/categories/${slug}/` : '/category.html';
+  return slug ? `/categories/${slug}/` : '/categories/';
 }
 
 function tokenizeForDedupe(value) {
@@ -874,7 +874,7 @@ function injectHomeStructuredData(data, products, faqItems) {
       '@type': 'WebSite',
       name: 'Best Beauty Tech Reviews',
       url: homeUrl,
-      description: 'Expert rankings and reviews of beauty styling tools.'
+      description: 'Comparison rankings and reviews of beauty styling tools.'
     });
   }
 
@@ -1602,7 +1602,7 @@ async function initProduct() {
       `High-confidence option for ${product.best_for.toLowerCase()} with score ${toScoreValue(product.score)} and strong peer standing in ${product.tool_type.toLowerCase()}.`;
   }
   if (reviewAuthor) reviewAuthor.textContent = 'Best Beauty Tech Editorial Team';
-  if (reviewExpertise) reviewExpertise.textContent = `${product.tool_type} comparative testing`;
+  if (reviewExpertise) reviewExpertise.textContent = `${product.tool_type} comparison analysis`;
   if (meta) {
     meta.innerHTML = `
       <div>Brand: ${escapeHtml(product.brand)}</div>

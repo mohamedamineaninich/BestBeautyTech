@@ -47,9 +47,9 @@ function getRequestTimeoutMs() {
 }
 
 const AUTHOR = {
-  name: 'Sarah Mitchell',
-  jobTitle: 'Senior Beauty Tech Editor',
-  bio: 'Beauty tech reviewer with 9 years of comparative testing experience across premium and value styling tools.'
+  name: 'Best Beauty Tech Editorial Team',
+  jobTitle: 'Editorial Review Team',
+  bio: 'Editorial team focused on structured beauty-tool comparisons using visible product data, price context, buyer-fit notes, and marketplace review signals.'
 };
 
 function getPageContext() {
@@ -505,12 +505,12 @@ function slugifyUrlPart(value) {
 function getProductReviewUrl(product) {
   const categorySlug = slugifyUrlPart(product?.tool_type);
   const productSlug = slugifyUrlPart(product?.name || product?.id);
-  return categorySlug && productSlug ? `/${categorySlug}/${productSlug}/` : '/product.html';
+  return categorySlug && productSlug ? `/${categorySlug}/${productSlug}/` : '/categories/';
 }
 
 function getCategoryUrl(toolType) {
   const slug = slugifyUrlPart(toolType);
-  return slug ? `/categories/${slug}/` : '/category.html';
+  return slug ? `/categories/${slug}/` : '/categories/';
 }
 
 function tokenizeForDedupe(value) {
@@ -938,15 +938,15 @@ function createLongReview(product, products, insight) {
   const peerName = insight.mostReviewedPeer ? escapeHtml(insight.mostReviewedPeer.name) : 'category peers';
 
   const paragraphs = [
-    `${safeName} ranks #${insight.rank} of ${insight.count} in our ${safeCategory.toLowerCase()} ranking, with a weighted expert score of ${scoreValue}/1.00. In our four-week protocol, this listing consistently delivered fast, stable drying performance without unpredictable heat spikes late in routines. For daily users, that consistency matters more than headline specs because it reduces correction passes and makes outcomes repeatable. If your current dryer leaves sections uneven or forces repeated touch-ups, this model targets exactly that pain point through balanced airflow and controlled thermal behavior.`,
-    `From a design perspective, ${safeBrand} clearly prioritizes routine ergonomics. The grip shape and in-session balance support longer styling windows with less hand fatigue. Across multiple testers and hair types, this improved overall comfort and made sectioning more predictable. A well-balanced chassis sounds minor until you use it repeatedly; then it becomes a significant quality-of-life factor. This is especially relevant for users styling several times each week, where small ergonomic advantages compound over time.`,
-    `Performance is where this product earns premium status. It maintained strong airflow while keeping heat feel controlled across repeated timed runs. In practical terms, users moved from damp to finish-ready faster than with many mid-range alternatives, while maintaining smoother final results. Testers also observed less frizz rebound after six hours when technique was held constant. That repeatability under time pressure is often the deciding factor in real-world value.`,
-    `Category benchmarks provide context. Average category pricing currently sits near ${avgPriceText}, while this listing is ${priceDeltaText} relative to that baseline. Category average rating is ${insight.avgRating.toFixed(2)}/5, and average visible review volume is ${formatInt(insight.avgReviews)}. This listing combines high social proof with strong score positioning. The most reviewed peer in this segment is ${peerName}, which helps frame confidence in the broader market landscape.`,
-    `Day-to-day user experience is shaped by setup friction as much as core power. This model makes transitions between rough dry and finishing passes straightforward enough that routines stay efficient. Testers reported fewer interrupted flows and less need to restart sections. If your current routine feels inconsistent because of tool behavior, this product can reduce that variability. The strongest fit remains ${safeBestFor.toLowerCase()}, and buyers in that use case are most likely to feel the premium difference in everyday use.`,
-    `Tradeoffs should be explicit. Strengths include ${safePros}. Limitations include ${safeCons}. Those tradeoffs are acceptable for routine-focused buyers but less compelling for occasional users who mainly need low upfront cost. This is not a universal budget recommendation; it is a targeted performance recommendation for users who style often enough to benefit from consistency gains.`,
-    `Value for money depends on frequency. At ${priceText}, this listing is expensive, but can still be rational if you style frequently and prioritize predictable finish quality. If you style only occasionally, lower-cost alternatives may deliver better cost efficiency. We recommend comparing total package value, including attachment bundle, seller policy, warranty handling, and return terms.`,
-    `Compared with top alternatives in the same segment, this listing generally wins on premium control feel and session-to-session consistency, while some competitors win on upfront pricing. The best approach is to shortlist this product with two peers, then compare routine fit, final checkout value, and included accessories.`,
-    `Final verdict: ${safeName} remains a high-confidence pick for buyers who style frequently and value consistent outcomes. The premium price is real, but so is the usability and finish-quality benefit for the right routine. If your priorities are speed, repeatability, and lower correction effort, this listing is technically justified.`
+    `${safeName} ranks #${insight.rank} of ${insight.count} in our ${safeCategory.toLowerCase()} ranking, with a weighted comparison score of ${scoreValue}/1.00. That score is not a lab-test claim. It combines visible marketplace rating, review confidence, price context, and buyer-fit signals so shoppers can shortlist products more quickly before checking the final retailer listing.`,
+    `${safeBrand} positions this product around ${safeBestFor.toLowerCase()}. That makes it most relevant for shoppers whose routine already matches that use case. If you want a different workflow, such as one-handle styling, brush-assisted volume, or the lowest possible upfront cost, use the alternatives table before deciding.`,
+    `The clearest positive signals are ${safePros || 'the product fit notes shown on this page'}. The main cautions are ${safeCons || 'the tradeoffs shown on this page'}. These points should be weighed together because a strong product can still be the wrong purchase when the attachment bundle, seller policy, or styling routine does not match the buyer.`,
+    `Category benchmarks provide context. Average category pricing currently sits near ${avgPriceText}, while this listing is ${priceDeltaText} relative to that baseline. Category average rating is ${insight.avgRating.toFixed(2)}/5, and average visible review volume is ${formatInt(insight.avgReviews)}. The most reviewed peer in this segment is ${peerName}, which helps frame how much buyer feedback exists across the category.`,
+    `Price matters because beauty tools can look similar while serving very different routines. At ${priceText}, this product should be judged against both the category average and the amount of weekly use you expect. Frequent users may justify a higher price when the tool matches their routine; occasional users may get better value from a lower-priced alternative.`,
+    `Review volume is useful but not enough by itself. A high rating with a small review base carries a different confidence level than a similar rating from thousands of visible reviews. The score shown here treats rating and review count as separate signals so a shopper can avoid relying on star rating alone.`,
+    `Before buying, confirm the exact model, included attachments, color, voltage, warranty language, return window, and seller type. Marketplace listings can group variants under one page, so the final checkout details may differ from the product name or image shown in a comparison table.`,
+    `Compared with top alternatives in the same segment, this listing should be shortlisted with at least one lower-priced peer and one higher-confidence peer. That keeps the decision anchored in routine fit and total value instead of brand recognition alone.`,
+    `Bottom line: shortlist ${safeName} if you want ${safeBestFor.toLowerCase()} and the listed tradeoffs are acceptable. Compare further if price, attachments, storage, seller terms, or a different styling workflow matter more than this product's strongest signals.`
   ];
 
   const fillerParagraphs = [
@@ -966,20 +966,20 @@ function createLongReview(product, products, insight) {
   }
 
   const htmlParts = [
-    '<h3>Design & Build Quality</h3>',
+    '<h3>Review Summary</h3>',
     `<p>${paragraphs[0]}</p>`,
     `<p>${paragraphs[1]}</p>`,
-    '<h3>Performance & Features</h3>',
+    '<h3>Pros and Tradeoffs</h3>',
     `<p>${paragraphs[2]}</p>`,
     `<p>${paragraphs[3]}</p>`,
-    '<h3>User Experience</h3>',
+    '<h3>Price and Review Context</h3>',
     `<p>${paragraphs[4]}</p>`,
     `<p>${paragraphs[5]}</p>`,
-    '<h3>Value for Money</h3>',
+    '<h3>Checkout Notes</h3>',
     `<p>${paragraphs[6]}</p>`,
-    '<h3>Comparison to Competitors</h3>',
+    '<h3>Alternatives to Compare</h3>',
     `<p>${paragraphs[7]}</p>`,
-    '<h3>Final Verdict</h3>',
+    '<h3>Bottom Line</h3>',
     `<p>${paragraphs[8]}</p>`
   ];
 
@@ -1036,7 +1036,7 @@ function renderFaq(faqItems) {
 
 function renderHero(product, insight) {
   const availability = resolveAvailability(product);
-  const pageTitle = `${product.name} Review (Evergreen): Expert Testing & Alternatives | Best Beauty Tech`;
+  const pageTitle = `${product.name} Review: Score, Pros, Cons, and Alternatives | Best Beauty Tech`;
   const ratingValue = asNumber(product.rating, 0);
   const hasRating = ratingValue > 0;
   const currentPriceText = formatCurrency(product.price);
@@ -1050,7 +1050,7 @@ function renderHero(product, insight) {
   const ratingText = hasRating
     ? `${ratingValue.toFixed(1)}/5 from ${formatInt(product.review_count)} reviews`
     : `editorial score ${Number(product.score).toFixed(2)}/1.00`;
-  const description = `${product.name} review: ${product.best_for}. Typical price range ${typicalRangeText}. Rating context: ${ratingText}. See expert testing, alternatives, and FAQs.`;
+  const description = `${product.name} review: ${product.best_for}. Typical price range ${typicalRangeText}. Rating context: ${ratingText}. See comparison score, alternatives, and FAQs.`;
 
   document.title = pageTitle;
   setText('pageTitle', pageTitle);
@@ -1058,7 +1058,7 @@ function renderHero(product, insight) {
   setText('productSubtitle', `Category rank #${insight.rank}/${insight.count} with ${formatInt(product.review_count)} Amazon reviews. Built for ${product.best_for.toLowerCase()}.`);
   setText('productScore', Number(product.score).toFixed(2));
 
-  setText('heroExpertScore', `Expert score: ${Number(product.score).toFixed(2)}/1.00`);
+  setText('heroExpertScore', `Comparison score: ${Number(product.score).toFixed(2)}/1.00`);
   setText('heroAmazonScore', hasRating ? `Amazon: ${ratingValue.toFixed(1)}/5 (${formatInt(product.review_count)} reviews)` : `Marketplace rating: not available`);
   setText('heroPriceBand', `Price band: ${Number(product.price) > insight.avgPrice ? 'Premium' : 'Value-focused'}`);
   setText('heroPrice', hasTypicalRange ? typicalRangeText : (availability.hasPrice ? currentPriceText : 'Price unavailable'));
@@ -1177,7 +1177,7 @@ function renderHero(product, insight) {
   setMetaById('productTwitterImage', safeUrl(product.image_featured || product.image_url));
 
   setText('reviewAuthor', AUTHOR.name);
-  setText('reviewExpertise', `${product.tool_type} comparative testing`);
+  setText('reviewExpertise', `${product.tool_type} comparison analysis`);
 
   return {
     availability,
@@ -1192,7 +1192,7 @@ function renderProsCons(product) {
 
   const pros = [
     ...(product.pros || []),
-    'Strong score consistency in repeated testing',
+    'Strong score consistency against category benchmarks',
     'High-confidence option for routine-heavy users',
     'Reliable performance against category benchmarks'
   ].slice(0, 7);
@@ -1277,8 +1277,8 @@ function renderUserReviewSummary(product) {
   setText('userRatingValue', hasRating ? `${ratingValue.toFixed(1)}/5` : 'N/A');
   setText('userReviewCount', hasRating ? formatInt(reviewCount) : 'Not available');
   setText('userReviewSummaryText', hasRating
-    ? 'Marketplace user ratings provide extra confidence for this listing, but editorial testing remains the primary ranking input.'
-    : 'User review data is not available for this listing. Editorial testing and category comparisons are used instead.');
+    ? 'Marketplace user ratings provide extra confidence for this listing, but the comparison model remains the primary ranking input.'
+    : 'User review data is not available for this listing. Category comparisons are used instead.');
 
   const distribution = document.getElementById('reviewDistribution');
   if (!distribution) return;
@@ -1744,7 +1744,7 @@ function injectSchemas(product, insight, faqItems, reviewData, availability = re
       toAmazonSizedImage(product.image_url, 960),
       toAmazonSizedImage(product.image_url, 640)
     ],
-    description: `${product.name} review with expert testing, score breakdown, pricing context, and buyer-fit guidance for ${product.best_for.toLowerCase()}.`,
+    description: `${product.name} review with score breakdown, pricing context, alternatives, and buyer-fit guidance for ${product.best_for.toLowerCase()}.`,
     brand: {
       '@type': 'Brand',
       name: product.brand
@@ -1774,9 +1774,8 @@ function injectSchemas(product, insight, faqItems, reviewData, availability = re
     '@id': reviewId,
     itemReviewed: { '@id': productId },
     author: {
-      '@type': 'Person',
-      name: AUTHOR.name,
-      jobTitle: AUTHOR.jobTitle
+      '@type': 'Organization',
+      name: AUTHOR.name
     },
     publisher: {
       '@type': 'Organization',
@@ -1797,16 +1796,11 @@ function injectSchemas(product, insight, faqItems, reviewData, availability = re
 
   const authorSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Person',
+    '@type': 'Organization',
     name: AUTHOR.name,
-    jobTitle: AUTHOR.jobTitle,
     description: AUTHOR.bio,
     url: new URL('about.html', window.location.href).toString(),
-    knowsAbout: ['Beauty technology', 'Hair dryer testing', 'Product comparison analysis'],
-    worksFor: {
-      '@type': 'Organization',
-      name: 'Best Beauty Tech Reviews'
-    }
+    knowsAbout: ['Beauty technology', 'Hair tool comparisons', 'Product comparison analysis']
   };
 
   const breadcrumbSchema = {
@@ -1902,6 +1896,11 @@ async function initProductPage() {
   const requestedId = params.get('id');
   const product = products.find((item) => item.id === requestedId) || products[0];
   if (!product) return;
+
+  if (window.location.pathname.endsWith('/product.html') || window.location.pathname.endsWith('product.html')) {
+    window.location.replace(requestedId ? getProductReviewUrl(product) : '/categories/');
+    return;
+  }
 
   const insight = buildCategoryInsight(product, products);
 
