@@ -420,10 +420,10 @@ function buildCategoryPage(template, category, products) {
   html = html.replace(/<meta property="og:title" id="categoryOgTitle" content="[^"]*">/, `<meta property="og:title" id="categoryOgTitle" content="${escapeAttr(title)}">`);
   html = html.replace(/<meta property="og:description" id="categoryOgDescription" content="[^"]*">/, `<meta property="og:description" id="categoryOgDescription" content="${escapeAttr(description)}">`);
   html = html.replace(/<meta property="og:url" id="categoryOgUrl" content="[^"]*">/, `<meta property="og:url" id="categoryOgUrl" content="${canonical}">`);
-  html = html.replace(/<meta property="og:image" id="categoryOgImage" content="[^"]*">/, `<meta property="og:image" id="categoryOgImage" content="${SITE_URL}/${escapeAttr(categoryProducts[0]?.image_url || 'imgs/amz001.avif')}">`);
+  html = html.replace(/<meta property="og:image" id="categoryOgImage" content="[^"]*">/, `<meta property="og:image" id="categoryOgImage" content="${SITE_URL}/${escapeAttr(categoryProducts[0]?.image_url || 'imgs/amz002.avif')}">`);
   html = html.replace(/<meta name="twitter:title" id="categoryTwitterTitle" content="[^"]*">/, `<meta name="twitter:title" id="categoryTwitterTitle" content="${escapeAttr(title)}">`);
   html = html.replace(/<meta name="twitter:description" id="categoryTwitterDescription" content="[^"]*">/, `<meta name="twitter:description" id="categoryTwitterDescription" content="${escapeAttr(description)}">`);
-  html = html.replace(/<meta name="twitter:image" id="categoryTwitterImage" content="[^"]*">/, `<meta name="twitter:image" id="categoryTwitterImage" content="${SITE_URL}/${escapeAttr(categoryProducts[0]?.image_url || 'imgs/amz001.avif')}">`);
+  html = html.replace(/<meta name="twitter:image" id="categoryTwitterImage" content="[^"]*">/, `<meta name="twitter:image" id="categoryTwitterImage" content="${SITE_URL}/${escapeAttr(categoryProducts[0]?.image_url || 'imgs/amz002.avif')}">`);
   html = html.replace(/href="category\.html"/g, `href="${categoriesIndexPath()}"`);
   html = html.replace(/<h1>Category Buying Guide<\/h1>/, `<h1>${escapeHtml(category)} Buying Guide</h1>`);
   html = html.replace(/<p id="categoryIntro">[\s\S]*?<\/p>/, `<p id="categoryIntro">${escapeHtml(description)}</p>`);
@@ -455,7 +455,7 @@ function buildCategoriesIndexPage(products, categories) {
     const topProduct = categoryProducts[0];
     const averagePrice = Math.round(average(categoryProducts, (product) => product.price));
     const averageRating = average(categoryProducts, (product) => product.rating).toFixed(1);
-    const imagePath = topProduct?.image_url ? `../${topProduct.image_url}` : '../imgs/amz001.avif';
+    const imagePath = topProduct?.image_url ? `../${topProduct.image_url}` : '../imgs/amz002.avif';
     const categoryHref = `${slugify(category)}/`;
     return `        <article class="card">
           <div class="card-media"><img src="${escapeAttr(imagePath)}" alt="${escapeAttr(category)} guide" loading="lazy" decoding="async" width="960" height="720"></div>
@@ -481,11 +481,11 @@ function buildCategoriesIndexPage(products, categories) {
   <meta property="og:title" content="Beauty Tool Categories: Reviews, Rankings, and Buying Guides | Best Beauty Tech">
   <meta property="og:description" content="Browse category guides with static product reviews, price context, buyer-fit notes, and comparison links.">
   <meta property="og:url" content="${absolute(categoriesIndexPath())}">
-  <meta property="og:image" content="${SITE_URL}/imgs/amz001.avif">
+  <meta property="og:image" content="${SITE_URL}/imgs/amz002.avif">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Beauty Tool Categories: Reviews, Rankings, and Buying Guides | Best Beauty Tech">
   <meta name="twitter:description" content="Browse category guides with static product reviews, price context, buyer-fit notes, and comparison links.">
-  <meta name="twitter:image" content="${SITE_URL}/imgs/amz001.avif">
+  <meta name="twitter:image" content="${SITE_URL}/imgs/amz002.avif">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:wght@500;700&display=optional">
