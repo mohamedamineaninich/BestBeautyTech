@@ -455,12 +455,14 @@ function buildCategoriesIndexPage(products, categories) {
     const topProduct = categoryProducts[0];
     const averagePrice = Math.round(average(categoryProducts, (product) => product.price));
     const averageRating = average(categoryProducts, (product) => product.rating).toFixed(1);
+    const imagePath = topProduct?.image_url ? `../${topProduct.image_url}` : '../imgs/amz001.avif';
+    const categoryHref = `${slugify(category)}/`;
     return `        <article class="card">
-          <div class="card-media"><img src="${escapeAttr(topProduct?.image_url || 'imgs/amz001.avif')}" alt="${escapeAttr(category)} guide" loading="lazy" decoding="async" width="960" height="720"></div>
+          <div class="card-media"><img src="${escapeAttr(imagePath)}" alt="${escapeAttr(category)} guide" loading="lazy" decoding="async" width="960" height="720"></div>
           <div class="label">${categoryProducts.length} reviews | Avg. ${averageRating}/5</div>
           <div class="title">${escapeHtml(category)}</div>
           <p>Compare ${categoryProducts.length} picks with pricing around ${escapeHtml(priceText({ price: averagePrice }))}, buyer-fit notes, pros, cons, and product-level review pages.</p>
-          <div class="card-actions"><a href="${categoryPath(category)}">Open guide</a></div>
+          <div class="card-actions"><a href="${categoryHref}">Open guide</a></div>
         </article>`;
   }).join('\n');
 

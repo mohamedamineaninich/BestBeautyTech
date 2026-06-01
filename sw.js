@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bbt-product-v3';
+const CACHE_NAME = 'bbt-product-v4';
 const OFFLINE_ASSETS = [
   './',
   'category.html',
@@ -36,14 +36,21 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   const isSameOrigin = url.origin === self.location.origin;
   const isImage = event.request.destination === 'image';
-  const isFreshDataRequest = isSameOrigin && (
-    url.pathname.endsWith('/data/products.json')
+  const isFreshRuntimeRequest = isSameOrigin && (
+    event.request.mode === 'navigate'
+    || event.request.destination === 'document'
+    || event.request.destination === 'script'
+    || event.request.destination === 'style'
+    || url.pathname.endsWith('/data/products.json')
     || url.pathname.endsWith('data/products.json')
     || url.pathname.endsWith('/js/site-config.js')
     || url.pathname.endsWith('js/site-config.js')
+    || url.pathname.endsWith('.html')
+    || url.pathname.endsWith('.js')
+    || url.pathname.endsWith('.css')
   );
 
-  if (isFreshDataRequest) {
+  if (isFreshRuntimeRequest) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
@@ -52,23 +59,6 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => caches.match(event.request))
-    );
-    return;
-  }
-
-  if (isSameOrigin && (url.pathname.endsWith('.html') || url.pathname.endsWith('.css') || url.pathname.endsWith('.js') || url.pathname.endsWith('.json'))) {
-    event.respondWith(
-      caches.match(event.request).then((cached) => {
-        const fetchPromise = fetch(event.request)
-          .then((response) => {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-            return response;
-          })
-          .catch(() => cached);
-
-        return cached || fetchPromise;
-      })
     );
     return;
   }

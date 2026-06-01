@@ -381,6 +381,27 @@ function getCategoryUrl(toolType) {
   return slug ? `/categories/${slug}/` : '/categories/';
 }
 
+function findProductForCurrentLocation(products) {
+  const params = new URLSearchParams(window.location.search);
+  const requestedId = params.get('id');
+  if (requestedId) {
+    const byId = products.find((item) => item.id === requestedId);
+    if (byId) return byId;
+  }
+
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const productSlug = pathParts[pathParts.length - 1] || '';
+  const categorySlug = pathParts[pathParts.length - 2] || '';
+  if (productSlug && categorySlug && productSlug !== 'product.html') {
+    const bySlug = products.find((item) =>
+      slugifyUrlPart(item.tool_type) === categorySlug && slugifyUrlPart(item.name || item.id) === productSlug
+    );
+    if (bySlug) return bySlug;
+  }
+
+  return products[0];
+}
+
 function tokenizeForDedupe(value) {
   return String(value || '')
     .toLowerCase()
@@ -1566,9 +1587,7 @@ function renderScoreBreakdown(container, weights, product) {
 
 async function initProduct() {
   const { data, products } = await enrichedDataPromise;
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id') || products[0]?.id;
-  const product = products.find((p) => p.id === id) || products[0];
+  const product = findProductForCurrentLocation(products);
   if (!product) return;
   const insight = buildCategoryInsight(product, products);
 

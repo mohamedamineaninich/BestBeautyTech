@@ -513,6 +513,33 @@ function getCategoryUrl(toolType) {
   return slug ? `/categories/${slug}/` : '/categories/';
 }
 
+function findProductForCurrentLocation(products) {
+  const params = new URLSearchParams(window.location.search);
+  const requestedId = params.get('id');
+  if (requestedId) {
+    const byId = products.find((item) => item.id === requestedId);
+    if (byId) return byId;
+  }
+
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const productSlug = pathParts[pathParts.length - 1] || '';
+  const categorySlug = pathParts[pathParts.length - 2] || '';
+  if (productSlug && categorySlug && productSlug !== 'product.html') {
+    const bySlug = products.find((item) =>
+      slugifyUrlPart(item.tool_type) === categorySlug && slugifyUrlPart(item.name || item.id) === productSlug
+    );
+    if (bySlug) return bySlug;
+  }
+
+  const injectedId = window.productData?.products?.[0]?.id || window.productData?.product?.id;
+  if (injectedId) {
+    const byInjectedId = products.find((item) => item.id === injectedId);
+    if (byInjectedId) return byInjectedId;
+  }
+
+  return products[0];
+}
+
 function tokenizeForDedupe(value) {
   return String(value || '')
     .toLowerCase()
@@ -1894,7 +1921,7 @@ async function initProductPage() {
   const products = enrichProducts(data);
   const params = new URLSearchParams(window.location.search);
   const requestedId = params.get('id');
-  const product = products.find((item) => item.id === requestedId) || products[0];
+  const product = findProductForCurrentLocation(products);
   if (!product) return;
 
   if (window.location.pathname.endsWith('/product.html') || window.location.pathname.endsWith('product.html')) {
